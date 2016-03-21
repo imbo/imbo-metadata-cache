@@ -17,7 +17,7 @@ services:
   - memcached
 before_install:
   - printf "\n" | pecl install --force memcached
-  - printf "\n" | pecl install apcu
+  - printf "\n" | pecl install apcu-4.0.10
 before_script:
   - phpenv config-add .travis-php.ini
   - composer self-update
