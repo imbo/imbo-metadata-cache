@@ -27,9 +27,9 @@
   },
   "require-dev": {
     "imbo/imbo": "dev-imbo-3.0",
-    "phpunit/phpunit": "~4.8",
-    "ext-memcached": "~2.1.0",
-    "ext-apcu": "~4.0.0"
+    "phpunit/phpunit": "^4.8",
+    "ext-memcached": "^2.1",
+    "ext-apcu": "^4.0"
   },
   "suggest": {
     "ext-memcached": "Enables usage of the Memcached cache adapter. Recommended version: >=2.2.0",
