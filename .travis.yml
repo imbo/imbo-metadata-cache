@@ -16,8 +16,8 @@ branches:
 services:
   - memcached
 before_install:
-  - pecl install --force memcached
-  - pecl install apcu
+  - printf "\n" | pecl install --force memcached
+  - printf "\n" | pecl install apcu
 before_script:
   - phpenv config-add .travis-php.ini
   - composer self-update
