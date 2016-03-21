@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="false" bootstrap="vendor/autoload.php">
+  <testsuites>
+    <testsuite>
+      <directory>tests/ImboTest</directory>
+    </testsuite>
+  </testsuites>
+
+  <php>
+    <var name="MEMCACHED_HOST" value="localhost" />
+    <var name="MEMCACHED_PORT" value="11211" />
+  </php>
+
+  <filter>
+    <whitelist addUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">src</directory>
+    </whitelist>
+  </filter>
+</phpunit>
