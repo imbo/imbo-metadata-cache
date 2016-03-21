@@ -16,6 +16,7 @@ branches:
 services:
   - memcached
 before_script:
+  - phpenv config-add .travis-php.ini
   - composer self-update
   - composer -n --no-ansi install --prefer-source
 script:
