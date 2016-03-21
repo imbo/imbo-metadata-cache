@@ -1,15 +1,15 @@
 <?php
-namespace ImboTest\EventListener;
+namespace ImboTest\Plugin\MetadataCache;
 
-use Imbo\EventListener\MetadataCache,
+use Imbo\Plugin\MetadataCache\EventListener,
     DateTime;
 
 /**
- * @covers Imbo\EventListener\MetadataCache
+ * @covers Imbo\Plugin\MetadataCache\EventListener
  */
-class MetadataCacheTest extends \PHPUnit_Framework_TestCase {
+class EventListenerTest extends \PHPUnit_Framework_TestCase {
     /**
-     * @var MetadataCache
+     * @var EventListener
      */
     private $listener;
 
@@ -25,7 +25,7 @@ class MetadataCacheTest extends \PHPUnit_Framework_TestCase {
      * Set up the listener
      */
     public function setUp() {
-        $this->cache = $this->getMock('Imbo\Cache\CacheInterface');
+        $this->cache = $this->getMock('Imbo\Plugin\MetadataCache\Cache\CacheInterface');
         $this->request = $this->getMock('Imbo\Http\Request\Request');
         $this->request->expects($this->any())->method('getUser')->will($this->returnValue($this->user));
         $this->request->expects($this->any())->method('getImageIdentifier')->will($this->returnValue($this->imageIdentifier));
@@ -36,7 +36,7 @@ class MetadataCacheTest extends \PHPUnit_Framework_TestCase {
         $this->event->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
         $this->event->expects($this->any())->method('getResponse')->will($this->returnValue($this->response));
 
-        $this->listener = new MetadataCache(['cache' => $this->cache]);
+        $this->listener = new EventListener(['cache' => $this->cache]);
     }
 
     /**
@@ -58,7 +58,7 @@ class MetadataCacheTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Imbo\EventListener\MetadataCache::loadFromCache
+     * @covers Imbo\Plugin\MetadataCache\EventListener::loadFromCache
      */
     public function testUpdatesResponseOnCacheHit() {
         $date = new DateTime();
@@ -78,7 +78,7 @@ class MetadataCacheTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Imbo\EventListener\MetadataCache::loadFromCache
+     * @covers Imbo\Plugin\MetadataCache\EventListener::loadFromCache
      */
     public function testDeletesInvalidCachedData() {
         $this->cache->expects($this->once())->method('get')->with($this->isType('string'))->will($this->returnValue([
@@ -92,7 +92,7 @@ class MetadataCacheTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Imbo\EventListener\MetadataCache::storeInCache
+     * @covers Imbo\Plugin\MetadataCache\EventListener::storeInCache
      */
     public function testStoresDataInCacheWhenResponseCodeIs200() {
         $lastModified = new DateTime();
@@ -114,7 +114,7 @@ class MetadataCacheTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Imbo\EventListener\MetadataCache::storeInCache
+     * @covers Imbo\Plugin\MetadataCache\EventListener::storeInCache
      */
     public function testStoresDataInCacheWhenResponseCodeIs200AndHasNoModel() {
         $lastModified = new DateTime();
@@ -132,7 +132,7 @@ class MetadataCacheTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Imbo\EventListener\MetadataCache::storeInCache
+     * @covers Imbo\Plugin\MetadataCache\EventListener::storeInCache
      */
     public function testDoesNotStoreDataInCacheWhenResponseCodeIsNot200() {
         $this->cache->expects($this->never())->method('set');
@@ -142,8 +142,8 @@ class MetadataCacheTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Imbo\EventListener\MetadataCache::deleteFromCache
-     * @covers Imbo\EventListener\MetadataCache::getCacheKey
+     * @covers Imbo\Plugin\MetadataCache\EventListener::deleteFromCache
+     * @covers Imbo\Plugin\MetadataCache\EventListener::getCacheKey
      */
     public function testCanDeleteContentFromCache() {
         $this->cache->expects($this->once())->method('delete')->with('metadata:' . $this->user . '|' . $this->imageIdentifier);
@@ -155,6 +155,12 @@ class MetadataCacheTest extends \PHPUnit_Framework_TestCase {
      * @expectedExceptionMessage The cache parameter is missing or not valid
      */
     public function testThrowsExceptionOnMissingCacheAdapter() {
-        $listener = new MetadataCache([]);
+        $listener = new EventListener([]);
+    }
+
+    public function testGetSubscribedEventsReturnsAnArrayOfEvents() {
+        $events = EventListener::getSubscribedEvents();
+
+        $this->assertInternalType('array', $events);
     }
 }

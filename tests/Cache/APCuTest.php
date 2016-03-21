@@ -1,10 +1,10 @@
 <?php
-namespace ImboTest\Cache;
+namespace ImboTest\Plugin\MetadataCache\Cache;
 
-use Imbo\Cache\APCu;
+use Imbo\Plugin\MetadataCache\Cache\APCu;
 
 /**
- * @covers Imbo\Cache\APCu
+ * @covers Imbo\Plugin\MetadataCache\Cache\APCu
  */
 class APCuTest extends CacheTests {
     protected function getDriver() {

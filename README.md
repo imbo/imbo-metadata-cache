@@ -16,6 +16,9 @@ Install using [Composer](http://getcomposer.org) by adding `imbo/imbo-metadata-c
 To enable the metadata-cache in your Imbo installation you need to add a key to the `eventListener` part of the configuration:
 
 ```php
+use Imbo\Plugin\MetadataCache\Cache,
+    Imbo\Plugin\MetadataCache\EventListener;
+
 return [
     // ...
 
@@ -25,13 +28,13 @@ return [
         'metadataCache' => function() {
             $memcached = new Memcached();
             $memcached->addServer('localhost', 11211);
-            $adapter = new Imbo\Cache\Memcached($memcached, 'myCacheKeyNamespace');
+            $adapter = new Cache\Memcached($memcached, 'myCacheKeyNamespace');
 
             // or
 
-            $adapter = new Imbo\Cache\APCu('myCacheKeyNamespace');
+            $adapter = new Cache\APCu('myCacheKeyNamespace');
 
-            return new Imbo\EventListener\MetadataCache(['cache' => $adapter]);
+            return new EventListener(['cache' => $adapter]);
         },
 
         // ...

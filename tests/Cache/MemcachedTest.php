@@ -1,11 +1,11 @@
 <?php
-namespace ImboTest\Cache;
+namespace ImboTest\Plugin\MetadataCache\Cache;
 
-use Imbo\Cache\Memcached,
+use Imbo\Plugin\MetadataCache\Cache\Memcached,
     Memcached as PeclMemcached;
 
 /**
- * @covers Imbo\Cache\Memcached
+ * @covers Imbo\Plugin\MetadataCache\Cache\Memcached
  */
 class MemcachedTest extends CacheTests {
     protected function getDriver() {

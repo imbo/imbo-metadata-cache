@@ -1,5 +1,5 @@
 <?php
-namespace Imbo\Cache;
+namespace Imbo\Plugin\MetadataCache\Cache;
 
 /**
  * Cache adapter interface

@@ -1,8 +1,9 @@
 <?php
-namespace Imbo\EventListener;
+namespace Imbo\Plugin\MetadataCache;
 
-use Imbo\EventManager\EventInterface,
-    Imbo\Cache\CacheInterface,
+use Imbo\Plugin\MetadataCache\Cache\CacheInterface,
+    Imbo\EventListener\ListenerInterface,
+    Imbo\EventManager\EventInterface,
     Imbo\Model\Metadata as MetadataModel,
     Imbo\Exception\InvalidArgumentException,
     DateTime;
@@ -12,7 +13,7 @@ use Imbo\EventManager\EventInterface,
  *
  * @author Christer Edvartsen <cogo@starzinger.net>
  */
-class MetadataCache implements ListenerInterface {
+class EventListener implements ListenerInterface {
     /**
      * Cache driver
      *

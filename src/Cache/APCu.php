@@ -1,14 +1,12 @@
 <?php
-namespace Imbo\Cache;
-
-use Memcached as PeclMemcached;
+namespace Imbo\Plugin\MetadataCache\Cache;
 
 /**
- * Memcached cache adapter
+ * APCu cache
  *
  * @author Christer Edvartsen <cogo@starzinger.net>
  */
-class Memcached implements CacheInterface {
+class APCu implements CacheInterface {
     /**
      * Key namespace
      *
@@ -17,20 +15,11 @@ class Memcached implements CacheInterface {
     private $namespace;
 
     /**
-     * The memcached instance to use
-     *
-     * @var PeclMemcached
-     */
-    private $memcached;
-
-    /**
      * Class constructor
      *
-     * @param PeclMemcached $memcached An instance of pecl/memcached
      * @param string $namespace A prefix that will be added to all keys
      */
-    public function __construct(PeclMemcached $memcached, $namespace = null) {
-        $this->memcached = $memcached;
+    public function __construct($namespace = null) {
         $this->namespace = $namespace;
     }
 
@@ -38,35 +27,42 @@ class Memcached implements CacheInterface {
      * {@inheritdoc}
      */
     public function get($key) {
-        return $this->memcached->get($this->getKey($key));
+        return apc_fetch($this->getKey($key));
     }
 
     /**
      * {@inheritdoc}
      */
     public function set($key, $value, $expire = 0) {
-        return $this->memcached->set($this->getKey($key), $value, $expire);
+        return apc_store($this->getKey($key), $value, $expire);
     }
 
     /**
      * {@inheritdoc}
      */
     public function delete($key) {
-        return $this->memcached->delete($this->getKey($key));
+        return apc_delete($this->getKey($key));
     }
 
     /**
      * {@inheritdoc}
      */
     public function increment($key, $amount = 1) {
-        return $this->memcached->increment($this->getKey($key), $amount);
+        return apc_inc($this->getKey($key), $amount);
     }
 
     /**
      * {@inheritdoc}
      */
     public function decrement($key, $amount = 1) {
-        return $this->memcached->decrement($this->getKey($key), $amount);
+        $result = apc_dec($this->getKey($key), $amount);
+
+        if ($result < 0) {
+            $result = 0;
+            $this->set($key, $result);
+        }
+
+        return $result;
     }
 
     /**
@@ -76,10 +72,6 @@ class Memcached implements CacheInterface {
      * @return string A namespaced key
      */
     protected function getKey($key) {
-        if (empty($this->namespace)) {
-            return $key;
-        }
-
         return $this->namespace . ':' . $key;
     }
 }

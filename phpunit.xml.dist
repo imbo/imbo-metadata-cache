@@ -2,7 +2,7 @@
 <phpunit colors="false" bootstrap="vendor/autoload.php">
   <testsuites>
     <testsuite>
-      <directory>tests/ImboTest</directory>
+      <directory>tests</directory>
     </testsuite>
   </testsuites>
 
