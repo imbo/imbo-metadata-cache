@@ -32,8 +32,8 @@ before_install:
     else
       printf "\n" | pecl install -f apcu-4.0.11
     fi
+  - printf "\n" | pecl install imagick
   - echo 'extension = memcached.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  - echo 'extension = imagick.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - echo 'apc.enable_cli=On' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - php -m
 
