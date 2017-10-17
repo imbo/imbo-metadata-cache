@@ -24,10 +24,7 @@ services:
   - memcached
 
 before_install:
-  - sudo add-apt-repository -y ppa:moti-p/cc
-  - sudo apt-get update
-  - sudo apt-get -y --reinstall install imagemagick
-  - printf "\n" | pecl install apcu-4.0.10
+  - pecl list
   - printf "\n" | pecl install imagick
 
 before_script:
