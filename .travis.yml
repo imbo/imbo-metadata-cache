@@ -30,7 +30,7 @@ before_install:
     # Install different version of APCu for different PHP-versions
     if [[ $TRAVIS_PHP_VERSION = 7.* ]]; then
       APCU_VERSION=5
-    elif
+    else
       APCU_VERSION=4
     fi
 
