@@ -10,8 +10,6 @@ use DateTime;
 
 /**
  * Metadata cache
- *
- * @author Christer Edvartsen <cogo@starzinger.net>
  */
 class EventListener implements ListenerInterface {
     /**
@@ -70,7 +68,12 @@ class EventListener implements ListenerInterface {
 
         $result = $this->cache->get($cacheKey);
 
-        if (is_array($result) && isset($result['lastModified']) && ($result['lastModified'] instanceof DateTime) && isset($result['metadata'])) {
+        if (
+            is_array($result) &&
+            isset($result['lastModified']) &&
+            $result['lastModified'] instanceof DateTime &&
+            isset($result['metadata'])
+        ) {
             $model = new MetadataModel();
             $model->setData($result['metadata']);
 
@@ -83,7 +86,7 @@ class EventListener implements ListenerInterface {
             $event->stopPropagation();
             return;
         } else if ($result) {
-            // Invalid result stored in the cache. Delete
+            // Invalid result stored in the cache, delete
             $this->cache->delete($cacheKey);
         }
 

@@ -33,26 +33,4 @@ abstract class CacheTests extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($this->driver->delete($key));
         $this->assertFalse($this->driver->get($key));
     }
-
-    public function testIncrement() {
-        $value = 1;
-        $key = 'incrementKey';
-        $this->assertFalse($this->driver->get($key));
-        $this->assertFalse($this->driver->increment($key));
-        $this->driver->set($key, $value);
-        $this->assertSame(2, $this->driver->increment($key));
-        $this->assertSame(12, $this->driver->increment($key, 10));
-    }
-
-    public function testDecrement() {
-        $value = 10;
-        $key = 'decrementKey';
-        $this->assertFalse($this->driver->get($key));
-        $this->assertFalse($this->driver->decrement($key));
-        $this->driver->set($key, $value);
-        $this->assertSame(9, $this->driver->decrement($key));
-        // Make sure we don't go below zero
-        $this->assertSame(0, $this->driver->decrement($key, 100));
-        $this->assertSame(0, $this->driver->get($key));
-    }
 }

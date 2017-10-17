@@ -3,8 +3,6 @@ namespace Imbo\Plugin\MetadataCache\Cache;
 
 /**
  * APCu cache
- *
- * @author Christer Edvartsen <cogo@starzinger.net>
  */
 class APCu implements CacheInterface {
     /**
@@ -19,7 +17,7 @@ class APCu implements CacheInterface {
      *
      * @param string $namespace A prefix that will be added to all keys
      */
-    public function __construct($namespace = null) {
+    public function __construct($namespace) {
         $this->namespace = $namespace;
     }
 
@@ -42,27 +40,6 @@ class APCu implements CacheInterface {
      */
     public function delete($key) {
         return apc_delete($this->getKey($key));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function increment($key, $amount = 1) {
-        return apc_inc($this->getKey($key), $amount);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function decrement($key, $amount = 1) {
-        $result = apc_dec($this->getKey($key), $amount);
-
-        if ($result < 0) {
-            $result = 0;
-            $this->set($key, $result);
-        }
-
-        return $result;
     }
 
     /**

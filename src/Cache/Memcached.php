@@ -5,8 +5,6 @@ use Memcached as PeclMemcached;
 
 /**
  * Memcached cache adapter
- *
- * @author Christer Edvartsen <cogo@starzinger.net>
  */
 class Memcached implements CacheInterface {
     /**
@@ -29,7 +27,7 @@ class Memcached implements CacheInterface {
      * @param PeclMemcached $memcached An instance of pecl/memcached
      * @param string $namespace A prefix that will be added to all keys
      */
-    public function __construct(PeclMemcached $memcached, $namespace = null) {
+    public function __construct(PeclMemcached $memcached, $namespace) {
         $this->memcached = $memcached;
         $this->namespace = $namespace;
     }
@@ -53,20 +51,6 @@ class Memcached implements CacheInterface {
      */
     public function delete($key) {
         return $this->memcached->delete($this->getKey($key));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function increment($key, $amount = 1) {
-        return $this->memcached->increment($this->getKey($key), $amount);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function decrement($key, $amount = 1) {
-        return $this->memcached->decrement($this->getKey($key), $amount);
     }
 
     /**

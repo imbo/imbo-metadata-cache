@@ -3,10 +3,6 @@ namespace Imbo\Plugin\MetadataCache\Cache;
 
 /**
  * Cache adapter interface
- *
- * An interface for cache adapters.
- *
- * @author Christer Edvartsen <cogo@starzinger.net>
  */
 interface CacheInterface {
     /**
@@ -34,22 +30,4 @@ interface CacheInterface {
      * @return boolean True on success, false otherwise
      */
     function delete($key);
-
-    /**
-     * Increment a value
-     *
-     * @param string $key The key to use
-     * @param int $amount The amount to increment with
-     * @return int|boolean Returns new value on success or false on failure
-     */
-    function increment($key, $amount = 1);
-
-    /**
-     * Decrement a value
-     *
-     * @param string $key The key to use
-     * @param int $amount The amount to decrement with
-     * @return int|boolean Returns new value on success or false on failure
-     */
-    function decrement($key, $amount = 1);
 }
