@@ -1,5 +1,5 @@
 <?php
-namespace ImboTest\Plugin\MetadataCache\Cache;
+namespace Imbo\Plugin\MetadataCache\Cache;
 
 abstract class CacheTests extends \PHPUnit_Framework_TestCase {
     private $driver;

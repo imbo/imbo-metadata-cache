@@ -1,8 +1,7 @@
 <?php
-namespace ImboTest\Plugin\MetadataCache\Cache;
+namespace Imbo\Plugin\MetadataCache\Cache;
 
-use Imbo\Plugin\MetadataCache\Cache\Memcached,
-    Memcached as PeclMemcached;
+use Memcached as PeclMemcached;
 
 /**
  * @covers Imbo\Plugin\MetadataCache\Cache\Memcached

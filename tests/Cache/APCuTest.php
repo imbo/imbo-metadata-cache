@@ -1,7 +1,5 @@
 <?php
-namespace ImboTest\Plugin\MetadataCache\Cache;
-
-use Imbo\Plugin\MetadataCache\Cache\APCu;
+namespace Imbo\Plugin\MetadataCache\Cache;
 
 /**
  * @covers Imbo\Plugin\MetadataCache\Cache\APCu

@@ -1,13 +1,13 @@
 <?php
-namespace ImboTest\Plugin\MetadataCache;
+namespace Imbo\Plugin\MetadataCache;
 
-use Imbo\Plugin\MetadataCache\EventListener,
-    DateTime;
+use PHPUnit_Framework_TestCase;
+use DateTime;
 
 /**
- * @covers Imbo\Plugin\MetadataCache\EventListener
+ * @coversDefaultClass Imbo\Plugin\MetadataCache\EventListener
  */
-class EventListenerTest extends \PHPUnit_Framework_TestCase {
+class EventListenerTest extends PHPUnit_Framework_TestCase {
     /**
      * @var EventListener
      */
@@ -25,14 +25,14 @@ class EventListenerTest extends \PHPUnit_Framework_TestCase {
      * Set up the listener
      */
     public function setUp() {
-        $this->cache = $this->getMock('Imbo\Plugin\MetadataCache\Cache\CacheInterface');
-        $this->request = $this->getMock('Imbo\Http\Request\Request');
+        $this->cache = $this->createMock('Imbo\Plugin\MetadataCache\Cache\CacheInterface');
+        $this->request = $this->createMock('Imbo\Http\Request\Request');
         $this->request->expects($this->any())->method('getUser')->will($this->returnValue($this->user));
         $this->request->expects($this->any())->method('getImageIdentifier')->will($this->returnValue($this->imageIdentifier));
-        $this->responseHeaders = $this->getMock('Symfony\Component\HttpFoundation\HeaderBag');
-        $this->response = $this->getMock('Imbo\Http\Response\Response');
+        $this->responseHeaders = $this->createMock('Symfony\Component\HttpFoundation\HeaderBag');
+        $this->response = $this->createMock('Imbo\Http\Response\Response');
         $this->response->headers = $this->responseHeaders;
-        $this->event = $this->getMock('Imbo\EventManager\Event');
+        $this->event = $this->createMock('Imbo\EventManager\Event');
         $this->event->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
         $this->event->expects($this->any())->method('getResponse')->will($this->returnValue($this->response));
 
@@ -58,7 +58,7 @@ class EventListenerTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Imbo\Plugin\MetadataCache\EventListener::loadFromCache
+     * @covers ::loadFromCache
      */
     public function testUpdatesResponseOnCacheHit() {
         $date = new DateTime();
@@ -78,7 +78,7 @@ class EventListenerTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Imbo\Plugin\MetadataCache\EventListener::loadFromCache
+     * @covers ::loadFromCache
      */
     public function testDeletesInvalidCachedData() {
         $this->cache->expects($this->once())->method('get')->with($this->isType('string'))->will($this->returnValue([
@@ -92,7 +92,7 @@ class EventListenerTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Imbo\Plugin\MetadataCache\EventListener::storeInCache
+     * @covers ::storeInCache
      */
     public function testStoresDataInCacheWhenResponseCodeIs200() {
         $lastModified = new DateTime();
@@ -103,7 +103,7 @@ class EventListenerTest extends \PHPUnit_Framework_TestCase {
             'metadata' => $data,
         ]);
 
-        $model = $this->getMock('Imbo\Model\ArrayModel');
+        $model = $this->createMock('Imbo\Model\ArrayModel');
         $model->expects($this->once())->method('getData')->will($this->returnValue($data));
 
         $this->response->expects($this->once())->method('getStatusCode')->will($this->returnValue(200));
@@ -114,7 +114,7 @@ class EventListenerTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Imbo\Plugin\MetadataCache\EventListener::storeInCache
+     * @covers ::storeInCache
      */
     public function testStoresDataInCacheWhenResponseCodeIs200AndHasNoModel() {
         $lastModified = new DateTime();
@@ -132,7 +132,7 @@ class EventListenerTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Imbo\Plugin\MetadataCache\EventListener::storeInCache
+     * @covers ::storeInCache
      */
     public function testDoesNotStoreDataInCacheWhenResponseCodeIsNot200() {
         $this->cache->expects($this->never())->method('set');
@@ -142,8 +142,8 @@ class EventListenerTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @covers Imbo\Plugin\MetadataCache\EventListener::deleteFromCache
-     * @covers Imbo\Plugin\MetadataCache\EventListener::getCacheKey
+     * @covers ::deleteFromCache
+     * @covers ::getCacheKey
      */
     public function testCanDeleteContentFromCache() {
         $this->cache->expects($this->once())->method('delete')->with('metadata:' . $this->user . '|' . $this->imageIdentifier);
@@ -151,6 +151,7 @@ class EventListenerTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
+     * @covers ::__construct
      * @expectedException Imbo\Exception\InvalidArgumentException
      * @expectedExceptionMessage The cache parameter is missing or not valid
      */
@@ -158,6 +159,9 @@ class EventListenerTest extends \PHPUnit_Framework_TestCase {
         $listener = new EventListener([]);
     }
 
+    /**
+     * @covers ::getSubscribedEvents
+     */
     public function testGetSubscribedEventsReturnsAnArrayOfEvents() {
         $events = EventListener::getSubscribedEvents();
 
