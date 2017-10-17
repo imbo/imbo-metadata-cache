@@ -4,10 +4,10 @@ namespace Imbo\Plugin\MetadataCache\Cache;
 use Memcached as PeclMemcached;
 
 /**
- * @covers Imbo\Plugin\MetadataCache\Cache\Memcached
+ * @coversDefaultClass Imbo\Plugin\MetadataCache\Cache\Memcached
  */
 class MemcachedTest extends CacheTests {
-    protected function getDriver() {
+    protected function getAdapter() {
         if (!extension_loaded('memcached')) {
             $this->markTestSkipped('Memcached is not installed');
         }

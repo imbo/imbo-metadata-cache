@@ -1,17 +1,22 @@
 <?php
 namespace Imbo\Plugin\MetadataCache\Cache;
 
-abstract class CacheTests extends \PHPUnit_Framework_TestCase {
-    private $driver;
+use PHPUnit_Framework_TestCase;
 
-    abstract protected function getDriver();
+abstract class CacheTests extends PHPUnit_Framework_TestCase {
+    /**
+     * @var CacheInterface
+     */
+    private $adpter;
+
+    abstract protected function getAdapter();
 
     public function setUp() {
-        $this->driver = $this->getDriver();
+        $this->adapter = $this->getAdapter();
     }
 
     public function tearDown() {
-        $this->driver = null;
+        $this->adapter = null;
     }
 
     public function getCacheData() {
@@ -27,10 +32,10 @@ abstract class CacheTests extends \PHPUnit_Framework_TestCase {
      * @dataProvider getCacheData
      */
     public function testSetGetAndDelete($key, $value) {
-        $this->assertFalse($this->driver->get($key));
-        $this->driver->set($key, $value);
-        $this->assertEquals($value, $this->driver->get($key));
-        $this->assertTrue($this->driver->delete($key));
-        $this->assertFalse($this->driver->get($key));
+        $this->assertFalse($this->adapter->get($key));
+        $this->adapter->set($key, $value);
+        $this->assertEquals($value, $this->adapter->get($key));
+        $this->assertTrue($this->adapter->delete($key));
+        $this->assertFalse($this->adapter->get($key));
     }
 }
