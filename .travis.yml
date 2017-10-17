@@ -34,7 +34,7 @@ before_install:
       APCU_VERSION=4
     fi
 
-    printf "\n" | pecl install apcu-$APCU_VERSION
+    printf "\n" | pecl install -f apcu-$APCU_VERSION
   - printf "\n" | pecl install memcached
   - php -m
 
