@@ -25,6 +25,8 @@ services:
   - memcached
 
 before_install:
+  - printf "\n" | pecl install apcu
+  - printf "\n" | pecl install memcached
   - php -m
 
 before_script:
