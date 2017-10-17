@@ -7,6 +7,9 @@ use Memcached as PeclMemcached;
  * @coversDefaultClass Imbo\Plugin\MetadataCache\Cache\Memcached
  */
 class MemcachedTest extends CacheTests {
+    /**
+     * {@inheritdoc}
+     */
     protected function getAdapter() {
         if (!extension_loaded('memcached')) {
             $this->markTestSkipped('Memcached is not installed');
@@ -22,12 +25,6 @@ class MemcachedTest extends CacheTests {
         $memcached = new PeclMemcached();
         $memcached->addServer($host, $port);
 
-        static $timestamp = 0;
-
-        if (!$timestamp) {
-            $timestamp = microtime(true);
-        }
-
-        return new Memcached($memcached, 'ImboTestSuite' . $timestamp);
+        return new Memcached($memcached, uniqid('imbo-metadata-cache-test-', true));
     }
 }
