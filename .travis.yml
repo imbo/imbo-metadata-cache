@@ -29,12 +29,10 @@ before_install:
   - |
     # Install different version of APCu for different PHP-versions
     if [[ $TRAVIS_PHP_VERSION = 7.* ]]; then
-      APCU_VERSION=5
+      printf "\n" | pecl install apcu
     else
-      APCU_VERSION=4
+      printf "\n" | pecl install -f apcu-4.0.11
     fi
-
-    printf "\n" | pecl install -f apcu-$APCU_VERSION
   - printf "\n" | pecl install memcached
   - php -m
 
