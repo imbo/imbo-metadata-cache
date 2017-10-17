@@ -15,10 +15,6 @@ abstract class CacheTests extends PHPUnit_Framework_TestCase {
         $this->adapter = $this->getAdapter();
     }
 
-    public function tearDown() {
-        $this->adapter = null;
-    }
-
     public function getCacheData() {
         return [
             ['key1', 'value'],

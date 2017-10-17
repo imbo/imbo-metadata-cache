@@ -40,17 +40,6 @@ class EventListenerTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * Tear down the listener
-     */
-    public function tearDown() {
-        $this->cache = null;
-        $this->request = null;
-        $this->response = null;
-        $this->event = null;
-        $this->listener = null;
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function getListener() {
