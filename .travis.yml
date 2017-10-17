@@ -9,6 +9,7 @@ cache:
 php:
   - 5.6
   - 7.0
+  - 7.1
 
 notifications:
   irc:
@@ -25,11 +26,20 @@ services:
   - memcached
 
 before_install:
-  - printf "\n" | pecl install apcu
+  - |
+    # Install different version of APCu for different PHP-versions
+    if [[ $TRAVIS_PHP_VERSION = 7.* ]]; then
+      APCU_VERSION=5
+    elif
+      APCU_VERSION=4
+    fi
+
+    printf "\n" | pecl install apcu-$APCU_VERSION
   - printf "\n" | pecl install memcached
   - php -m
 
 before_script:
+  - echo 'apc.enable_cli=On' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - phpenv config-add .travis-php.ini
   - composer self-update
   - composer lint
