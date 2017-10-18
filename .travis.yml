@@ -7,7 +7,6 @@ cache:
     - $HOME/.composer/cache
 
 php:
-  - 5.6
   - 7.0
   - 7.1
 
@@ -26,14 +25,10 @@ services:
   - memcached
 
 before_install:
-  - |
-    if [[ $TRAVIS_PHP_VERSION = 7.* ]]; then
-      printf "\n" | pecl install apcu
-    else
-      printf "\n" | pecl install -f apcu-4.0.11
-    fi
+  - php -m
+  - printf "\n" | pecl install apcu
+  - printf "\n" | pecl install memcached
   - printf "\n" | pecl install imagick
-  - echo 'extension = memcached.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - echo 'apc.enable_cli=On' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - php -m
 

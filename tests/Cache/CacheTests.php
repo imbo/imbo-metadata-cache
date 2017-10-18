@@ -1,10 +1,10 @@
 <?php
 namespace Imbo\Plugin\MetadataCache\Cache;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
-abstract class CacheTests extends PHPUnit_Framework_TestCase {
+abstract class CacheTests extends TestCase {
     /**
      * @var CacheInterface
      */

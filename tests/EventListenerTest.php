@@ -1,13 +1,13 @@
 <?php
 namespace Imbo\Plugin\MetadataCache;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 
 /**
  * @coversDefaultClass Imbo\Plugin\MetadataCache\EventListener
  */
-class EventListenerTest extends PHPUnit_Framework_TestCase {
+class EventListenerTest extends TestCase {
     /**
      * @var EventListener
      */

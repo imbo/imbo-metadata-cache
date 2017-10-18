@@ -23,17 +23,17 @@
     "docs": "https://github.com/imbo/imbo-metadata-cache"
   },
   "require": {
-    "php": ">=5.6.0"
+    "php": ">=7.0"
   },
   "require-dev": {
     "imbo/imbo": "dev-develop",
-    "phpunit/phpunit": "^5.6",
-    "ext-memcached": ">=2.2",
-    "ext-apcu": ">=4.0"
+    "phpunit/phpunit": "^6.4",
+    "ext-memcached": ">=3.0",
+    "ext-apcu": ">=5.1"
   },
   "suggest": {
-    "ext-memcached": "Enables usage of the Memcached cache adapter. Recommended version: >=2.2",
-    "ext-apcu": "Enables usage of the APCu cache adapter. Recommended version: >=4.0"
+    "ext-memcached": "Enables usage of the Memcached cache adapter. Recommended version: >=3.0",
+    "ext-apcu": "Enables usage of the APCu cache adapter. Recommended version: >=5.1"
   },
   "autoload": {
     "psr-4": {
