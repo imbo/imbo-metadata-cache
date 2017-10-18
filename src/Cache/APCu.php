@@ -25,21 +25,21 @@ class APCu implements CacheInterface {
      * {@inheritdoc}
      */
     public function get($key) {
-        return apc_fetch($this->getKey($key));
+        return apcu_fetch($this->getKey($key));
     }
 
     /**
      * {@inheritdoc}
      */
     public function set($key, $value, $expire = 0) {
-        return apc_store($this->getKey($key), $value, $expire);
+        return apcu_store($this->getKey($key), $value, $expire);
     }
 
     /**
      * {@inheritdoc}
      */
     public function delete($key) {
-        return apc_delete($this->getKey($key));
+        return apcu_delete($this->getKey($key));
     }
 
     /**
