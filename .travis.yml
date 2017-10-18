@@ -26,8 +26,8 @@ services:
 
 before_install:
   - php -m
-  - printf "\n" | pecl install apcu
   - printf "\n" | pecl install imagick
+  - echo 'extension=apcu.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - echo 'extension=memcached.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - echo 'apc.enable_cli=On' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - php -m
