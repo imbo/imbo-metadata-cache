@@ -54,8 +54,7 @@ If you wish to use this, run the following command to start up the service after
 
 After the service is running you can execute all tests by simply running PHPUnit:
 
-composer run test # or ./vendor/bin/phpunit
-
+    composer run test # or ./vendor/bin/phpunit
 
 ## License
 
