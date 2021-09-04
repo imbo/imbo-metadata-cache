@@ -1,24 +1,21 @@
 # Imbo metadata cache
-This is an event listener that can be added to Imbo to cache metadata using one of the supported adapters. Currently adapters for Memcached and APCu exists.
 
-[![Current build Status](https://secure.travis-ci.org/imbo/imbo-metadata-cache.png)](http://travis-ci.org/imbo/imbo-metadata-cache)
+[![CI](https://github.com/imbo/imbo-metadata-cache/workflows/CI/badge.svg)](https://github.com/imbo/imbo-metadata-cache/actions?query=workflow%3ACI)
+
+This is an event listener that can be added to Imbo to cache metadata using one of the supported adapters. The event listener currently supports [Memcached](https://memcached.org/) and [APC User Cache](https://www.php.net/manual/en/book.apcu.php).
 
 ## Installation
-Install using [Composer](http://getcomposer.org) by adding `imbo/imbo-metadata-cache` to you `composer.json` file:
 
-```json
-"require": {
-    "imbo/imbo-metadata-cache": "^1.0.0"
-}
-```
+    composer require imbo/imbo-metadata-cache
 
-## Configuration
-To enable the metadata-cache in your Imbo installation you need to add a key to the `eventListener` part of the configuration:
+## Usage
+
+To enable the metadata cache in your Imbo installation you need to add a key to the `eventListener` part of the configuration:
 
 ```php
-<?php
-use Imbo\Plugin\MetadataCache\Cache,
-    Imbo\Plugin\MetadataCache\EventListener;
+<?php declare(strict_types=1);
+use Imbo\Plugin\MetadataCache\Cache;
+use Imbo\Plugin\MetadataCache\EventListener;
 
 return [
     // ...
@@ -45,10 +42,21 @@ return [
 ];
 ```
 
-This plugin ships with two different adapters as shown in the example above, APCu and Memcached. APCu requires the [apcu pecl extension](http://pecl.php.net/package/apcu), and Memcached requires the [memcached pecl extension](http://pecl.php.net/package/memcached) and one or more running memcached servers.
+This plugin ships with two different adapters as shown in the example above, APCu and Memcached. APCu requires the [apcu pecl extension](https://pecl.php.net/package/apcu), and Memcached requires the [memcached pecl extension](https://pecl.php.net/package/memcached) and one or more running memcached servers.
 
-### APCu
-This adapter takes one optional parameter, `string $namespace`, that is used for namespacing of cache keys.
+## Running integration tests
 
-### Memcached
-This adapter takes two parameters, the first being an instance of the [Memcached](http://php.net/manual/en/class.memcached.php) class and the second, `string $namespace`, that is used for namespacing of cache keys.
+If you want to run the integration tests you will need a running Memcached service. The repo contains a simple configuration file for [Docker Compose](https://docs.docker.com/compose/) that you can use to quickly run a Memcached instance.
+
+If you wish to use this, run the following command to start up the service after you have cloned the repo:
+
+    docker-compose up -d
+
+After the service is running you can execute all tests by simply running PHPUnit:
+
+composer run test # or ./vendor/bin/phpunit
+
+
+## License
+
+MIT, see [LICENSE](LICENSE).

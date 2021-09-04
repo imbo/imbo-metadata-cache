@@ -1,19 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imbo\Plugin\MetadataCache\Cache;
 
 /**
  * @coversDefaultClass Imbo\Plugin\MetadataCache\Cache\APCu
  */
-class APCuTest extends CacheTests {
-    /**
-     * {@inheritdoc}
-     */
-    protected function getAdapter() {
-        if (!extension_loaded('apc') && !extension_loaded('apcu')) {
+class APCuTest extends CacheTests
+{
+    protected function getAdapter(): APCu
+    {
+        if (!extension_loaded('apcu')) {
             $this->markTestSkipped('APC(u) is not installed');
-        }
-
-        if (!ini_get('apc.enable_cli')) {
+        } elseif (!ini_get('apc.enable_cli')) {
             $this->markTestSkipped('apc.enable_cli must be set to On to run this test case');
         }
 

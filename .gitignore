@@ -1,3 +1,7 @@
 build
 vendor
 phpunit.xml
+.vscode
+.php-cs-fixer.cache
+.phpunit.result.cache
+.psalm

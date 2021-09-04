@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imbo\Plugin\MetadataCache\Cache;
 
 use Memcached as PeclMemcached;
@@ -6,20 +6,19 @@ use Memcached as PeclMemcached;
 /**
  * @coversDefaultClass Imbo\Plugin\MetadataCache\Cache\Memcached
  */
-class MemcachedTest extends CacheTests {
-    /**
-     * {@inheritdoc}
-     */
-    protected function getAdapter() {
+class MemcachedTest extends CacheTests
+{
+    protected function getAdapter(): Memcached
+    {
         if (!extension_loaded('memcached')) {
             $this->markTestSkipped('Memcached is not installed');
         }
 
-        $host = !empty($GLOBALS['MEMCACHED_HOST']) ? $GLOBALS['MEMCACHED_HOST'] : null;
-        $port = !empty($GLOBALS['MEMCACHED_PORT']) ? $GLOBALS['MEMCACHED_PORT'] : null;
+        $host = (string) getenv('MEMCACHED_HOST');
+        $port = (int) getenv('MEMCACHED_PORT');
 
-        if (!$host || !$port) {
-            $this->markTestSkipped('Specify both MEMCACHED_HOST and MEMCACHED_PORT in your phpunit.xml file to run this test case');
+        if ('' === $host || 0 === $port) {
+            $this->markTestSkipped('Specify both MEMCACHED_HOST and MEMCACHED_PORT in your PHPUnit configuration file to run this test case');
         }
 
         $memcached = new PeclMemcached();

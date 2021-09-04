@@ -1,30 +1,27 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imbo\Plugin\MetadataCache;
 
-use Imbo\Plugin\MetadataCache\Cache\CacheInterface;
+use DateTime;
 use Imbo\EventListener\ListenerInterface;
 use Imbo\EventManager\EventInterface;
-use Imbo\Model\Metadata as MetadataModel;
 use Imbo\Exception\InvalidArgumentException;
-use DateTime;
+use Imbo\Model\Metadata as MetadataModel;
+use Imbo\Plugin\MetadataCache\Cache\CacheInterface;
 
 /**
  * Metadata cache
  */
-class EventListener implements ListenerInterface {
-    /**
-     * Cache driver
-     *
-     * @var CacheInterface
-     */
-    private $cache;
+class EventListener implements ListenerInterface
+{
+    private CacheInterface $cache;
 
     /**
      * Class constructor
      *
      * @param array $params Parameters for the event listener
      */
-    public function __construct(array $params) {
+    public function __construct(array $params)
+    {
         if (!isset($params['cache']) || !($params['cache'] instanceof CacheInterface)) {
             throw new InvalidArgumentException('The cache parameter is missing or not valid', 500);
         }
@@ -32,10 +29,8 @@ class EventListener implements ListenerInterface {
         $this->cache = $params['cache'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents() {
+    public static function getSubscribedEvents(): array
+    {
         return [
             // Load and store in cache
             'db.metadata.load' => [
@@ -57,22 +52,25 @@ class EventListener implements ListenerInterface {
      *
      * @param EventInterface $event The event instance
      */
-    public function loadFromCache(EventInterface $event) {
+    public function loadFromCache(EventInterface $event): void
+    {
         $request = $event->getRequest();
         $response = $event->getResponse();
 
         $cacheKey = $this->getCacheKey(
             $request->getUser(),
-            $request->getImageIdentifier()
+            $request->getImageIdentifier(),
         );
 
+        /** @var mixed */
         $result = $this->cache->get($cacheKey);
 
         if (
             is_array($result) &&
             isset($result['lastModified']) &&
             $result['lastModified'] instanceof DateTime &&
-            isset($result['metadata'])
+            isset($result['metadata']) &&
+            is_array($result['metadata'])
         ) {
             $model = new MetadataModel();
             $model->setData($result['metadata']);
@@ -85,7 +83,7 @@ class EventListener implements ListenerInterface {
             // Stop propagation of listeners for this event
             $event->stopPropagation();
             return;
-        } else if ($result) {
+        } elseif ($result) {
             // Invalid result stored in the cache, delete
             $this->cache->delete($cacheKey);
         }
@@ -98,13 +96,14 @@ class EventListener implements ListenerInterface {
      *
      * @param EventInterface $event The event instance
      */
-    public function storeInCache(EventInterface $event) {
+    public function storeInCache(EventInterface $event): void
+    {
         $request = $event->getRequest();
         $response = $event->getResponse();
 
         $cacheKey = $this->getCacheKey(
             $request->getUser(),
-            $request->getImageIdentifier()
+            $request->getImageIdentifier(),
         );
 
         // Store the response in the cache for later use
@@ -112,6 +111,7 @@ class EventListener implements ListenerInterface {
             $metadata = [];
 
             if ($model = $response->getModel()) {
+                /** @var mixed */
                 $metadata = $model->getData();
             }
 
@@ -127,12 +127,13 @@ class EventListener implements ListenerInterface {
      *
      * @param EventInterface $event The event instance
      */
-    public function deleteFromCache(EventInterface $event) {
+    public function deleteFromCache(EventInterface $event): void
+    {
         $request = $event->getRequest();
 
         $cacheKey = $this->getCacheKey(
             $request->getUser(),
-            $request->getImageIdentifier()
+            $request->getImageIdentifier(),
         );
 
         $this->cache->delete($cacheKey);
@@ -145,7 +146,8 @@ class EventListener implements ListenerInterface {
      * @param string $imageIdentifier The current image identifier
      * @return string Returns a cache key
      */
-    private function getCacheKey($user, $imageIdentifier) {
-        return 'metadata:' . $user . '|' . $imageIdentifier;
+    private function getCacheKey(string $user, string $imageIdentifier = null): string
+    {
+        return 'metadata:' . $user . '|' . (string) $imageIdentifier;
     }
 }

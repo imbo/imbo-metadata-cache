@@ -1,28 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 namespace Imbo\Plugin\MetadataCache\Cache;
 
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-abstract class CacheTests extends TestCase {
-    /**
-     * @var CacheInterface
-     */
-    private $adpter;
+abstract class CacheTests extends TestCase
+{
+    abstract protected function getAdapter(): CacheInterface;
 
     /**
-     * Get the adapter to test
-     *
-     * @return CacheInterface
+     * @return array<string,array{key:string,value:mixed}>
      */
-    abstract protected function getAdapter();
-
-    /**
-     * Data provider
-     *
-     * @return array[]
-     */
-    public function getCacheData() {
+    public function getCacheData(): array
+    {
         return [
             'string value' => [
                 'key' => 'key1',
@@ -52,29 +42,30 @@ abstract class CacheTests extends TestCase {
      * @covers ::set
      * @covers ::delete
      */
-    public function testSetGetAndDelete($key, $value) {
+    public function testSetGetAndDelete(string $key, $value): void
+    {
         $adapter = $this->getAdapter();
 
         $this->assertFalse(
             $adapter->get($key),
-            'Cache retrieval should return boolean false'
+            'Cache retrieval should return false',
         );
         $this->assertTrue(
             $adapter->set($key, $value),
-            'Cache storage should return boolean true'
+            'Cache storage should return true',
         );
         $this->assertEquals(
             $value,
             $adapter->get($key),
-            'Incorrect value return from cache'
+            'Incorrect value returned from cache',
         );
         $this->assertTrue(
             $adapter->delete($key),
-            'Cache deletion should return boolean false'
+            'Cache deletion should return true',
         );
         $this->assertFalse(
             $adapter->get($key),
-            'Value does not seem to have been removed from cache'
+            'Value has not been removed from cache',
         );
     }
 }
