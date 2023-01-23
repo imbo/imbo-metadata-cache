@@ -72,8 +72,10 @@ class EventListener implements ListenerInterface
             isset($result['metadata']) &&
             is_array($result['metadata'])
         ) {
+            /** @var array<string, mixed> */
+            $metadata = $result['metadata'];
             $model = new MetadataModel();
-            $model->setData($result['metadata']);
+            $model->setData($metadata);
 
             $response->setModel($model)
                      ->setLastModified($result['lastModified']);
