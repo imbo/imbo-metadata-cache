@@ -9,40 +9,13 @@ abstract class CacheTests extends TestCase
     abstract protected function getAdapter(): CacheInterface;
 
     /**
-     * @return array<string,array{key:string,value:mixed}>
-     */
-    public function getCacheData(): array
-    {
-        return [
-            'string value' => [
-                'key' => 'key1',
-                'value' => 'value',
-            ],
-            'numeric value' => [
-                'key' => 'key2',
-                'value' => 123,
-            ],
-            'list value' => [
-                'key' => 'key3',
-                'value' => [1, 2, 3],
-            ],
-            'object value' => [
-                'key' => 'key4',
-                'value' => new stdClass(),
-            ],
-        ];
-    }
-
-    /**
      * @dataProvider getCacheData
-     * @param string $key The cache key
-     * @param mixed $value The cache value
      * @covers ::__construct
      * @covers ::get
      * @covers ::set
      * @covers ::delete
      */
-    public function testSetGetAndDelete(string $key, $value): void
+    public function testSetGetAndDelete(string $key, mixed $value): void
     {
         $adapter = $this->getAdapter();
 
@@ -67,5 +40,30 @@ abstract class CacheTests extends TestCase
             $adapter->get($key),
             'Value has not been removed from cache',
         );
+    }
+
+    /**
+     * @return array<string,array{key:string,value:mixed}>
+     */
+    public static function getCacheData(): array
+    {
+        return [
+            'string value' => [
+                'key' => 'key1',
+                'value' => 'value',
+            ],
+            'numeric value' => [
+                'key' => 'key2',
+                'value' => 123,
+            ],
+            'list value' => [
+                'key' => 'key3',
+                'value' => [1, 2, 3],
+            ],
+            'object value' => [
+                'key' => 'key4',
+                'value' => new stdClass(),
+            ],
+        ];
     }
 }

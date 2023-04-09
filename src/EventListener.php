@@ -56,11 +56,13 @@ class EventListener implements ListenerInterface
     {
         $request = $event->getRequest();
         $response = $event->getResponse();
+        $user = $request->getUser();
 
-        $cacheKey = $this->getCacheKey(
-            $request->getUser(),
-            $request->getImageIdentifier(),
-        );
+        if (null === $user) {
+            return;
+        }
+
+        $cacheKey = $this->getCacheKey($user, $request->getImageIdentifier());
 
         /** @var mixed */
         $result = $this->cache->get($cacheKey);
@@ -100,28 +102,31 @@ class EventListener implements ListenerInterface
      */
     public function storeInCache(EventInterface $event): void
     {
-        $request = $event->getRequest();
         $response = $event->getResponse();
 
-        $cacheKey = $this->getCacheKey(
-            $request->getUser(),
-            $request->getImageIdentifier(),
-        );
-
-        // Store the response in the cache for later use
-        if ($response->getStatusCode() === 200) {
-            $metadata = [];
-
-            if ($model = $response->getModel()) {
-                /** @var mixed */
-                $metadata = $model->getData();
-            }
-
-            $this->cache->set($cacheKey, [
-                'lastModified' => $response->getLastModified(),
-                'metadata' => $metadata,
-            ]);
+        if ($response->getStatusCode() !== 200) {
+            return;
         }
+
+        $request = $event->getRequest();
+        $user = $request->getUser();
+
+        if (null === $user) {
+            return;
+        }
+
+        $cacheKey = $this->getCacheKey($user, $request->getImageIdentifier());
+        $metadata = [];
+
+        if ($model = $response->getModel()) {
+            /** @var mixed */
+            $metadata = $model->getData();
+        }
+
+        $this->cache->set($cacheKey, [
+            'lastModified' => $response->getLastModified(),
+            'metadata' => $metadata,
+        ]);
     }
 
     /**
@@ -132,13 +137,13 @@ class EventListener implements ListenerInterface
     public function deleteFromCache(EventInterface $event): void
     {
         $request = $event->getRequest();
+        $user = $request->getUser();
 
-        $cacheKey = $this->getCacheKey(
-            $request->getUser(),
-            $request->getImageIdentifier(),
-        );
+        if (null === $user) {
+            return;
+        }
 
-        $this->cache->delete($cacheKey);
+        $this->cache->delete($this->getCacheKey($user, $request->getImageIdentifier()));
     }
 
     /**

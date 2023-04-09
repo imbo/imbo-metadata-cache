@@ -18,21 +18,11 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  */
 class EventListenerTest extends TestCase
 {
-    /** @var EventInterface&MockObject */
-    private EventInterface $event;
-
-    /** @var Request&MockObject */
-    private Request $request;
-
-    /** @var Response&MockObject */
-    private Response $response;
-
-    /** @var CacheInterface&MockObject */
-    private $cache;
-
-    /** @var ResponseHeaderBag&MockObject */
-    private $responseHeaders;
-
+    private EventInterface&MockObject $event;
+    private Request&MockObject $request;
+    private Response&MockObject $response;
+    private CacheInterface&MockObject $cache;
+    private ResponseHeaderBag&MockObject $responseHeaders;
     private string $user = 'user';
     private string $imageIdentifier = 'imageid';
     private EventListener $listener;
@@ -60,6 +50,63 @@ class EventListenerTest extends TestCase
     protected function getListener(): EventListener
     {
         return $this->listener;
+    }
+
+    /**
+     * @covers ::loadFromCache
+     */
+    public function testLoadFromCacheReturnsEarlyOnMissingUser(): void
+    {
+        $this->cache
+            ->expects($this->never())
+            ->method('get');
+
+        $this->listener->loadFromCache(
+            $this->createConfiguredMock(EventInterface::class, [
+                'getRequest' => $this->createMock(Request::class),
+            ]),
+        );
+    }
+
+    /**
+     * @covers ::storeInCache
+     */
+    public function testStoreInCacheReturnsEarlyOnMissingUser(): void
+    {
+        $this->cache
+            ->expects($this->never())
+            ->method('set');
+
+        /** @var Request&MockObject */
+        $request = $this->createMock(Request::class);
+        $request
+            ->expects($this->never())
+            ->method('getImageIdentifier');
+
+        $this->listener->storeInCache(
+            $this->createConfiguredMock(EventInterface::class, [
+                'getRequest' => $request,
+                'getResponse' => $this->createConfiguredMock(Response::class, [
+                    'getStatusCode' => 200,
+                ]),
+            ]),
+        );
+    }
+
+    /**
+     * @covers ::deleteFromCache
+     */
+    public function testDeleteFromCacheReturnsEarlyOnMissingUser(): void
+    {
+        $this->cache
+            ->expects($this->never())
+            ->method('delete');
+
+        $this->listener->deleteFromCache(
+            $this->createConfiguredMock(EventInterface::class, [
+                'getRequest' => $this->createMock(Request::class),
+            ]),
+        );
     }
 
     /**
@@ -152,6 +199,7 @@ class EventListenerTest extends TestCase
                 'metadata' => $data,
             ]);
 
+        /** @var ArrayModel&MockObject */
         $model = $this->createMock(ArrayModel::class);
         $model
             ->expects($this->once())

@@ -23,7 +23,7 @@
     "ext-memcached": "*",
     "imbo/imbo": "dev-main",
     "imbo/imbo-coding-standard": "^2.0",
-    "phpunit/phpunit": "^9.5",
+    "phpunit/phpunit": "^10.0",
     "psalm/plugin-phpunit": "^0.18.4",
     "vimeo/psalm": "^5.5"
   },
@@ -42,8 +42,8 @@
     }
   },
   "scripts": {
-    "test": "vendor/bin/phpunit --verbose",
-    "test:coverage": "vendor/bin/phpunit --verbose --coverage-html build/coverage",
+    "test": "vendor/bin/phpunit",
+    "test:coverage": "vendor/bin/phpunit --coverage-html build/coverage",
     "cs": "php-cs-fixer fix --dry-run --diff",
     "sa": "vendor/bin/psalm",
     "ci": [
