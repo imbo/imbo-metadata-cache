@@ -18,7 +18,7 @@ class EventListener implements ListenerInterface
     /**
      * Class constructor
      *
-     * @param array $params Parameters for the event listener
+     * @param array<mixed> $params Parameters for the event listener
      */
     public function __construct(array $params)
     {
@@ -119,7 +119,7 @@ class EventListener implements ListenerInterface
         $metadata = [];
 
         if ($model = $response->getModel()) {
-            /** @var mixed */
+            /** @var array<mixed> */
             $metadata = $model->getData();
         }
 

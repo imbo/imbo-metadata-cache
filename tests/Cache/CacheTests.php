@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace Imbo\Plugin\MetadataCache\Cache;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -8,13 +9,7 @@ abstract class CacheTests extends TestCase
 {
     abstract protected function getAdapter(): CacheInterface;
 
-    /**
-     * @dataProvider getCacheData
-     * @covers ::__construct
-     * @covers ::get
-     * @covers ::set
-     * @covers ::delete
-     */
+    #[DataProvider('getCacheData')]
     public function testSetGetAndDelete(string $key, mixed $value): void
     {
         $adapter = $this->getAdapter();

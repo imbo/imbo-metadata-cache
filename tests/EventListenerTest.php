@@ -2,6 +2,7 @@
 namespace Imbo\Plugin\MetadataCache;
 
 use DateTime;
+use DateTimeImmutable;
 use Imbo\EventManager\EventInterface;
 use Imbo\Exception\InvalidArgumentException;
 use Imbo\Http\Request\Request;
@@ -9,13 +10,12 @@ use Imbo\Http\Response\Response;
 use Imbo\Model\ArrayModel;
 use Imbo\Model\Metadata;
 use Imbo\Plugin\MetadataCache\Cache\CacheInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
-/**
- * @coversDefaultClass Imbo\Plugin\MetadataCache\EventListener
- */
+#[CoversClass(EventListener::class)]
 class EventListenerTest extends TestCase
 {
     private EventInterface&MockObject $event;
@@ -52,9 +52,6 @@ class EventListenerTest extends TestCase
         return $this->listener;
     }
 
-    /**
-     * @covers ::loadFromCache
-     */
     public function testLoadFromCacheReturnsEarlyOnMissingUser(): void
     {
         $this->cache
@@ -68,9 +65,6 @@ class EventListenerTest extends TestCase
         );
     }
 
-    /**
-     * @covers ::storeInCache
-     */
     public function testStoreInCacheReturnsEarlyOnMissingUser(): void
     {
         $this->cache
@@ -93,9 +87,6 @@ class EventListenerTest extends TestCase
         );
     }
 
-    /**
-     * @covers ::deleteFromCache
-     */
     public function testDeleteFromCacheReturnsEarlyOnMissingUser(): void
     {
         $this->cache
@@ -109,9 +100,6 @@ class EventListenerTest extends TestCase
         );
     }
 
-    /**
-     * @covers ::loadFromCache
-     */
     public function testUpdatesResponseOnCacheHit(): void
     {
         $date = new DateTime();
@@ -119,7 +107,7 @@ class EventListenerTest extends TestCase
         $this->cache
             ->expects($this->once())
             ->method('get')
-            ->with($this->isType('string'))
+            ->with($this->isString())
             ->willReturn([
                 'lastModified' => $date,
                 'metadata' => [
@@ -150,15 +138,12 @@ class EventListenerTest extends TestCase
         $this->listener->loadFromCache($this->event);
     }
 
-    /**
-     * @covers ::loadFromCache
-     */
     public function testDeletesInvalidCachedData(): void
     {
         $this->cache
             ->expects($this->once())
             ->method('get')
-            ->with($this->isType('string'))
+            ->with($this->isString())
             ->willReturn([
                 'lastModified' => 'preformatted date',
                 'metadata' => [
@@ -169,7 +154,7 @@ class EventListenerTest extends TestCase
         $this->cache
             ->expects($this->once())
             ->method('delete')
-            ->with($this->isType('string'));
+            ->with($this->isString());
 
         $this->responseHeaders
             ->expects($this->once())
@@ -183,21 +168,21 @@ class EventListenerTest extends TestCase
         $this->listener->loadFromCache($this->event);
     }
 
-    /**
-     * @covers ::storeInCache
-     */
     public function testStoresDataInCacheWhenResponseCodeIs200(): void
     {
-        $lastModified = new DateTime();
+        $lastModified = new DateTimeImmutable();
         $data = ['some' => 'value'];
 
         $this->cache
             ->expects($this->once())
             ->method('set')
-            ->with($this->isType('string'), [
-                'lastModified' => $lastModified,
-                'metadata' => $data,
-            ]);
+            ->with(
+                $this->isString(),
+                [
+                    'lastModified' => $lastModified,
+                    'metadata' => $data,
+                ],
+            );
 
         /** @var ArrayModel&MockObject */
         $model = $this->createMock(ArrayModel::class);
@@ -224,20 +209,20 @@ class EventListenerTest extends TestCase
         $this->listener->storeInCache($this->event);
     }
 
-    /**
-     * @covers ::storeInCache
-     */
     public function testStoresDataInCacheWhenResponseCodeIs200AndHasNoModel(): void
     {
-        $lastModified = new DateTime();
+        $lastModified = new DateTimeImmutable();
 
         $this->cache
             ->expects($this->once())
             ->method('set')
-            ->with($this->isType('string'), [
-                'lastModified' => $lastModified,
-                'metadata' => [],
-            ]);
+            ->with(
+                $this->isString(),
+                [
+                    'lastModified' => $lastModified,
+                    'metadata' => [],
+                ],
+            );
 
         $this->response
             ->expects($this->once())
@@ -257,9 +242,6 @@ class EventListenerTest extends TestCase
         $this->listener->storeInCache($this->event);
     }
 
-    /**
-     * @covers ::storeInCache
-     */
     public function testDoesNotStoreDataInCacheWhenResponseCodeIsNot200(): void
     {
         $this->cache
@@ -274,10 +256,6 @@ class EventListenerTest extends TestCase
         $this->listener->storeInCache($this->event);
     }
 
-    /**
-     * @covers ::deleteFromCache
-     * @covers ::getCacheKey
-     */
     public function testCanDeleteContentFromCache(): void
     {
         $this->cache
@@ -288,9 +266,6 @@ class EventListenerTest extends TestCase
         $this->listener->deleteFromCache($this->event);
     }
 
-    /**
-     * @covers ::__construct
-     */
     public function testThrowsExceptionOnMissingCacheAdapter(): void
     {
         $this->expectException(InvalidArgumentException::class);

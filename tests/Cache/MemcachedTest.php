@@ -2,10 +2,9 @@
 namespace Imbo\Plugin\MetadataCache\Cache;
 
 use Memcached as PeclMemcached;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @coversDefaultClass Imbo\Plugin\MetadataCache\Cache\Memcached
- */
+#[CoversClass(Memcached::class)]
 class MemcachedTest extends CacheTests
 {
     protected function getAdapter(): Memcached

@@ -16,16 +16,18 @@
     }
   ],
   "require": {
-    "php": ">=8.1"
+    "php": ">=8.3"
   },
   "require-dev": {
     "ext-apcu": "*",
     "ext-memcached": "*",
+    "friendsofphp/php-cs-fixer": "^3.70",
     "imbo/imbo": "dev-main",
     "imbo/imbo-coding-standard": "^2.0",
-    "phpunit/phpunit": "^10.0",
-    "psalm/plugin-phpunit": "^0.18.4",
-    "vimeo/psalm": "^5.5"
+    "phpstan/extension-installer": "^1.4",
+    "phpstan/phpstan": "^2.1",
+    "phpstan/phpstan-phpunit": "^2.0",
+    "phpunit/phpunit": "^12.0"
   },
   "suggest": {
     "ext-memcached": "Enables usage of the Memcached cache adapter",
@@ -44,8 +46,8 @@
   "scripts": {
     "test": "vendor/bin/phpunit",
     "test:coverage": "vendor/bin/phpunit --coverage-html build/coverage",
-    "cs": "php-cs-fixer fix --dry-run --diff",
-    "sa": "vendor/bin/psalm",
+    "cs": "vendor/bin/php-cs-fixer fix --dry-run --diff",
+    "sa": "vendor/bin/phpstan analyse",
     "ci": [
       "@test",
       "@sa",
@@ -53,6 +55,9 @@
     ]
   },
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "phpstan/extension-installer": true
+    }
   }
 }

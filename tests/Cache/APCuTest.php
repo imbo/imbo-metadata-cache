@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 namespace Imbo\Plugin\MetadataCache\Cache;
 
-/**
- * @coversDefaultClass Imbo\Plugin\MetadataCache\Cache\APCu
- */
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(APCu::class)]
 class APCuTest extends CacheTests
 {
     protected function getAdapter(): APCu
