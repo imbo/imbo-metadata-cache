@@ -23,6 +23,12 @@ class MemcachedTest extends CacheTests
         $memcached = new PeclMemcached();
         $memcached->addServer($host, $port);
 
+        /** @var array<mixed>|false */
+        $version = $memcached->getVersion();
+        if (false === $version) {
+            $this->markTestSkipped('Could not connect to Memcached server at ' . $host . ':' . $port);
+        }
+
         return new Memcached($memcached, uniqid('imbo-metadata-cache-test-', true));
     }
 }

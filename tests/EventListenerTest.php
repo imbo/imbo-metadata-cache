@@ -10,6 +10,7 @@ use Imbo\Http\Response\Response;
 use Imbo\Model\ArrayModel;
 use Imbo\Model\Metadata;
 use Imbo\Plugin\MetadataCache\Cache\CacheInterface;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +20,6 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class EventListenerTest extends TestCase
 {
     private EventInterface&MockObject $event;
-    private Request&MockObject $request;
     private Response&MockObject $response;
     private CacheInterface&MockObject $cache;
     private ResponseHeaderBag&MockObject $responseHeaders;
@@ -30,15 +30,14 @@ class EventListenerTest extends TestCase
     protected function setUp(): void
     {
         $this->cache = $this->createMock(CacheInterface::class);
-        $this->request = $this->createConfiguredMock(Request::class, [
-            'getUser' => $this->user,
-            'getImageIdentifier' => $this->imageIdentifier,
-        ]);
         $this->responseHeaders = $this->createMock(ResponseHeaderBag::class);
         $this->response = $this->createMock(Response::class);
         $this->response->headers = $this->responseHeaders;
         $this->event = $this->createConfiguredMock(EventInterface::class, [
-            'getRequest' => $this->request,
+            'getRequest' => $this->createConfiguredStub(Request::class, [
+                'getUser' => $this->user,
+                'getImageIdentifier' => $this->imageIdentifier,
+            ]),
             'getResponse' => $this->response,
         ]);
 
@@ -52,6 +51,7 @@ class EventListenerTest extends TestCase
         return $this->listener;
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testLoadFromCacheReturnsEarlyOnMissingUser(): void
     {
         $this->cache
@@ -59,12 +59,13 @@ class EventListenerTest extends TestCase
             ->method('get');
 
         $this->listener->loadFromCache(
-            $this->createConfiguredMock(EventInterface::class, [
-                'getRequest' => $this->createMock(Request::class),
+            $this->createConfiguredStub(EventInterface::class, [
+                'getRequest' => $this->createStub(Request::class),
             ]),
         );
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testStoreInCacheReturnsEarlyOnMissingUser(): void
     {
         $this->cache
@@ -78,15 +79,16 @@ class EventListenerTest extends TestCase
             ->method('getImageIdentifier');
 
         $this->listener->storeInCache(
-            $this->createConfiguredMock(EventInterface::class, [
+            $this->createConfiguredStub(EventInterface::class, [
                 'getRequest' => $request,
-                'getResponse' => $this->createConfiguredMock(Response::class, [
+                'getResponse' => $this->createConfiguredStub(Response::class, [
                     'getStatusCode' => 200,
                 ]),
             ]),
         );
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testDeleteFromCacheReturnsEarlyOnMissingUser(): void
     {
         $this->cache
@@ -94,8 +96,8 @@ class EventListenerTest extends TestCase
             ->method('delete');
 
         $this->listener->deleteFromCache(
-            $this->createConfiguredMock(EventInterface::class, [
-                'getRequest' => $this->createMock(Request::class),
+            $this->createConfiguredStub(EventInterface::class, [
+                'getRequest' => $this->createStub(Request::class),
             ]),
         );
     }
@@ -138,6 +140,7 @@ class EventListenerTest extends TestCase
         $this->listener->loadFromCache($this->event);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testDeletesInvalidCachedData(): void
     {
         $this->cache
@@ -168,6 +171,7 @@ class EventListenerTest extends TestCase
         $this->listener->loadFromCache($this->event);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testStoresDataInCacheWhenResponseCodeIs200(): void
     {
         $lastModified = new DateTimeImmutable();
@@ -209,6 +213,7 @@ class EventListenerTest extends TestCase
         $this->listener->storeInCache($this->event);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testStoresDataInCacheWhenResponseCodeIs200AndHasNoModel(): void
     {
         $lastModified = new DateTimeImmutable();
@@ -242,6 +247,7 @@ class EventListenerTest extends TestCase
         $this->listener->storeInCache($this->event);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testDoesNotStoreDataInCacheWhenResponseCodeIsNot200(): void
     {
         $this->cache
@@ -256,6 +262,7 @@ class EventListenerTest extends TestCase
         $this->listener->storeInCache($this->event);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testCanDeleteContentFromCache(): void
     {
         $this->cache
@@ -266,6 +273,7 @@ class EventListenerTest extends TestCase
         $this->listener->deleteFromCache($this->event);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testThrowsExceptionOnMissingCacheAdapter(): void
     {
         $this->expectException(InvalidArgumentException::class);

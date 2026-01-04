@@ -1,7 +1,5 @@
 # Imbo metadata cache
 
-[![CI](https://github.com/imbo/imbo-metadata-cache/workflows/CI/badge.svg)](https://github.com/imbo/imbo-metadata-cache/actions?query=workflow%3ACI)
-
 This is an event listener that can be added to Imbo to cache metadata using one of the supported adapters. The event listener currently supports [Memcached](https://memcached.org/) and [APC User Cache](https://www.php.net/manual/en/book.apcu.php).
 
 ## Installation
@@ -50,7 +48,7 @@ If you want to run the integration tests you will need a running Memcached servi
 
 If you wish to use this, run the following command to start up the service after you have cloned the repo:
 
-    docker-compose up -d
+    docker compose up -d
 
 After the service is running you can execute all tests by simply running PHPUnit:
 

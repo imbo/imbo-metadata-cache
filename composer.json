@@ -2,7 +2,12 @@
   "name": "imbo/imbo-metadata-cache",
   "type": "library",
   "description": "Metadata cache event listener for Imbo",
-  "keywords": [ "image storage", "image transformation", "image metadata", "cache" ],
+  "keywords": [
+    "image storage",
+    "image transformation",
+    "image metadata",
+    "cache"
+  ],
   "homepage": "https://imbo.io/",
   "license": "MIT",
   "authors": [
@@ -10,7 +15,8 @@
       "name": "Christer Edvartsen",
       "email": "cogo@starzinger.net",
       "homepage": "https://github.com/christeredvartsen"
-    }, {
+    },
+    {
       "name": "Contributors",
       "homepage": "https://github.com/imbo"
     }
@@ -21,13 +27,13 @@
   "require-dev": {
     "ext-apcu": "*",
     "ext-memcached": "*",
-    "friendsofphp/php-cs-fixer": "^3.70",
+    "friendsofphp/php-cs-fixer": "^3.92",
     "imbo/imbo": "dev-main",
-    "imbo/imbo-coding-standard": "^2.0",
+    "imbo/imbo-coding-standard": "^2.1",
     "phpstan/extension-installer": "^1.4",
     "phpstan/phpstan": "^2.1",
     "phpstan/phpstan-phpunit": "^2.0",
-    "phpunit/phpunit": "^12.0"
+    "phpunit/phpunit": "^12.5"
   },
   "suggest": {
     "ext-memcached": "Enables usage of the Memcached cache adapter",
@@ -46,11 +52,12 @@
   "scripts": {
     "test": "vendor/bin/phpunit",
     "test:coverage": "vendor/bin/phpunit --coverage-html build/coverage",
-    "cs": "vendor/bin/php-cs-fixer fix --dry-run --diff",
+    "cs": "vendor/bin/php-cs-fixer check --diff",
+    "cs:fix": "vendor/bin/php-cs-fixer fix --diff",
     "sa": "vendor/bin/phpstan analyse",
     "ci": [
-      "@test",
       "@sa",
+      "@test",
       "@cs"
     ]
   },

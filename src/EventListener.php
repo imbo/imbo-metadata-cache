@@ -153,7 +153,7 @@ class EventListener implements ListenerInterface
      * @param string $imageIdentifier The current image identifier
      * @return string Returns a cache key
      */
-    private function getCacheKey(string $user, string $imageIdentifier = null): string
+    private function getCacheKey(string $user, ?string $imageIdentifier = null): string
     {
         return 'metadata:' . $user . '|' . (string) $imageIdentifier;
     }
