@@ -687,12 +687,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/imbo/imbo.git",
-                "reference": "d88c3c0feec56c6e19512085b115c48f02f0a378"
+                "reference": "2dbaa3561a3ed94e8ed2fc682e01b21ae8458595"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imbo/imbo/zipball/d88c3c0feec56c6e19512085b115c48f02f0a378",
-                "reference": "d88c3c0feec56c6e19512085b115c48f02f0a378",
+                "url": "https://api.github.com/repos/imbo/imbo/zipball/2dbaa3561a3ed94e8ed2fc682e01b21ae8458595",
+                "reference": "2dbaa3561a3ed94e8ed2fc682e01b21ae8458595",
                 "shasum": ""
             },
             "require": {
@@ -705,15 +705,11 @@
             },
             "require-dev": {
                 "christeredvartsen/testfs": "^0.6",
+                "ext-mongodb": "^2.0",
                 "friendsofphp/php-cs-fixer": "^3.92",
                 "imbo/behat-api-extension": "^6.0",
-                "imbo/imbo-adapters-sdk": "dev-main",
                 "imbo/imbo-coding-standard": "^2.1",
-                "imbo/imbo-filesystem-adapters": "dev-main",
-                "imbo/imbo-mongodb-adapters": "dev-main",
-                "imbo/imbo-mysql-adapters": "dev-main",
-                "imbo/imbo-postgresql-adapters": "dev-main",
-                "imbo/imbo-sqlite-adapters": "dev-main",
+                "mongodb/mongodb": "^2.1",
                 "phpstan/extension-installer": "^1.4",
                 "phpstan/phpstan": "^2.1",
                 "phpstan/phpstan-deprecation-rules": "^2.0",
@@ -723,13 +719,8 @@
             },
             "suggest": {
                 "imbo/imbo-b2-adapters": "Enables usage of Backblaze B2 for storing images",
-                "imbo/imbo-filesystem-adapters": "Enables usage of a (local) filesystem for storing images",
                 "imbo/imbo-metadata-cache": "Enables caching of metadata through an event listener",
-                "imbo/imbo-mongodb-adapters": "Enables usage of MongoDB for storing images",
-                "imbo/imbo-mysql-adapters": "Enables usage of MySQL as database",
-                "imbo/imbo-postgresql-adapters": "Enables usage of PostgreSQL as database",
-                "imbo/imbo-s3-adapters": "Enables usage of AWS S3 for storing images",
-                "imbo/imbo-sqlite-adapters": "Enables usage of SQLite as database"
+                "imbo/imbo-s3-adapters": "Enables usage of AWS S3 for storing images"
             },
             "default-branch": true,
             "bin": [
@@ -738,7 +729,8 @@
             "type": "project",
             "autoload": {
                 "psr-4": {
-                    "Imbo\\": "src/"
+                    "Imbo\\": "src/",
+                    "ImboSDK\\": "adapter-sdk/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -768,7 +760,7 @@
                 "issues": "https://github.com/imbo/imbo/issues",
                 "source": "https://github.com/imbo/imbo"
             },
-            "time": "2026-01-03T13:57:52+00:00"
+            "time": "2026-01-07T21:26:40+00:00"
         },
         {
             "name": "imbo/imbo-coding-standard",

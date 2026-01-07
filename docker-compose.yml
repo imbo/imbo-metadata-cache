@@ -1,5 +1,5 @@
 services:
   memcached:
-    image: memcached:1.6-alpine
+    image: memcached:1.6
     ports:
       - 11211:11211

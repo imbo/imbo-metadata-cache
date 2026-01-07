@@ -19,10 +19,16 @@ jobs:
           - "8.3"
           - "8.4"
           - "8.5"
-    name: Validate and test on PHP ${{ matrix.php }}
+        memcached:
+          - "1.6"
+        composer-script:
+          - cs
+          - sa
+          - test
+    name: composer run ${{ matrix.composer-script }} / PHP ${{ matrix.php }}
     services:
       memcached:
-        image: memcached
+        image: memcached:${{ matrix.memcached }}
         ports:
           - 11211:11211
     steps:
@@ -40,9 +46,7 @@ jobs:
           path: ${{ steps.composer-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
       - run: composer install
-      - run: vendor/bin/phpstan analyse
-      - run: vendor/bin/phpunit
-      - run: PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer check --diff
+      - run: composer run ${{ matrix.composer-script }}
   branch-protection:
     needs:
       - ci

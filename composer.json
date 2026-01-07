@@ -36,8 +36,8 @@
     "phpunit/phpunit": "^12.5"
   },
   "suggest": {
-    "ext-memcached": "Enables usage of the Memcached cache adapter",
-    "ext-apcu": "Enables usage of the APCu cache adapter"
+    "ext-apcu": "Enables usage of the APCu cache adapter",
+    "ext-memcached": "Enables usage of the Memcached cache adapter"
   },
   "autoload": {
     "psr-4": {
@@ -50,16 +50,16 @@
     }
   },
   "scripts": {
-    "test": "vendor/bin/phpunit",
-    "test:coverage": "vendor/bin/phpunit --coverage-html build/coverage",
+    "ci": [
+      "@cs",
+      "@sa",
+      "@test"
+    ],
     "cs": "vendor/bin/php-cs-fixer check --diff",
     "cs:fix": "vendor/bin/php-cs-fixer fix --diff",
     "sa": "vendor/bin/phpstan analyse",
-    "ci": [
-      "@sa",
-      "@test",
-      "@cs"
-    ]
+    "test": "vendor/bin/phpunit",
+    "test:coverage": "vendor/bin/phpunit --coverage-html build/coverage"
   },
   "config": {
     "sort-packages": true,
