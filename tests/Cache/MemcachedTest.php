@@ -1,8 +1,11 @@
 <?php declare(strict_types=1);
+
 namespace Imbo\Plugin\MetadataCache\Cache;
 
 use Memcached as PeclMemcached;
 use PHPUnit\Framework\Attributes\CoversClass;
+
+use function extension_loaded;
 
 #[CoversClass(Memcached::class)]
 class MemcachedTest extends CacheTests
@@ -26,7 +29,7 @@ class MemcachedTest extends CacheTests
         /** @var array<mixed>|false */
         $version = $memcached->getVersion();
         if (false === $version) {
-            $this->markTestSkipped('Could not connect to Memcached server at ' . $host . ':' . $port);
+            $this->markTestSkipped('Could not connect to Memcached server at '.$host.':'.$port);
         }
 
         return new Memcached($memcached, uniqid('imbo-metadata-cache-test-', true));

@@ -1,10 +1,11 @@
 <?php declare(strict_types=1);
+
 namespace Imbo\Plugin\MetadataCache\Cache;
 
 use Memcached as PeclMemcached;
 
 /**
- * Memcached cache adapter
+ * Memcached cache adapter.
  */
 class Memcached implements CacheInterface
 {
@@ -13,10 +14,10 @@ class Memcached implements CacheInterface
     private PeclMemcached $memcached;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param PeclMemcached $memcached An instance of pecl/memcached
-     * @param string $namespace A prefix that will be added to all keys
+     * @param string        $namespace A prefix that will be added to all keys
      */
     public function __construct(PeclMemcached $memcached, $namespace)
     {
@@ -40,13 +41,14 @@ class Memcached implements CacheInterface
     }
 
     /**
-     * Generate a namespaced key
+     * Generate a namespaced key.
      *
      * @param string $key The key specified by the user
+     *
      * @return string A namespaced key
      */
     protected function getKey(string $key): string
     {
-        return $this->namespace . ':' . $key;
+        return $this->namespace.':'.$key;
     }
 }

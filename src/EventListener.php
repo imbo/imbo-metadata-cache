@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+
 namespace Imbo\Plugin\MetadataCache;
 
 use DateTime;
@@ -8,15 +9,17 @@ use Imbo\Exception\InvalidArgumentException;
 use Imbo\Model\Metadata as MetadataModel;
 use Imbo\Plugin\MetadataCache\Cache\CacheInterface;
 
+use function is_array;
+
 /**
- * Metadata cache
+ * Metadata cache.
  */
 class EventListener implements ListenerInterface
 {
     private CacheInterface $cache;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param array<mixed> $params Parameters for the event listener
      */
@@ -48,7 +51,7 @@ class EventListener implements ListenerInterface
     }
 
     /**
-     * Get data from the cache
+     * Get data from the cache.
      *
      * @param EventInterface $event The event instance
      */
@@ -64,15 +67,14 @@ class EventListener implements ListenerInterface
 
         $cacheKey = $this->getCacheKey($user, $request->getImageIdentifier());
 
-        /** @var mixed */
         $result = $this->cache->get($cacheKey);
 
         if (
-            is_array($result) &&
-            isset($result['lastModified']) &&
-            $result['lastModified'] instanceof DateTime &&
-            isset($result['metadata']) &&
-            is_array($result['metadata'])
+            is_array($result)
+            && isset($result['lastModified'])
+            && $result['lastModified'] instanceof DateTime
+            && isset($result['metadata'])
+            && is_array($result['metadata'])
         ) {
             /** @var array<string, mixed> */
             $metadata = $result['metadata'];
@@ -86,6 +88,7 @@ class EventListener implements ListenerInterface
 
             // Stop propagation of listeners for this event
             $event->stopPropagation();
+
             return;
         } elseif ($result) {
             // Invalid result stored in the cache, delete
@@ -96,7 +99,7 @@ class EventListener implements ListenerInterface
     }
 
     /**
-     * Store metadata in the cache
+     * Store metadata in the cache.
      *
      * @param EventInterface $event The event instance
      */
@@ -104,7 +107,7 @@ class EventListener implements ListenerInterface
     {
         $response = $event->getResponse();
 
-        if ($response->getStatusCode() !== 200) {
+        if (200 !== $response->getStatusCode()) {
             return;
         }
 
@@ -130,7 +133,7 @@ class EventListener implements ListenerInterface
     }
 
     /**
-     * Delete data from the cache
+     * Delete data from the cache.
      *
      * @param EventInterface $event The event instance
      */
@@ -147,14 +150,15 @@ class EventListener implements ListenerInterface
     }
 
     /**
-     * Generate a cache key
+     * Generate a cache key.
      *
-     * @param string $user The user which the image belongs to
+     * @param string $user            The user which the image belongs to
      * @param string $imageIdentifier The current image identifier
+     *
      * @return string Returns a cache key
      */
     private function getCacheKey(string $user, ?string $imageIdentifier = null): string
     {
-        return 'metadata:' . $user . '|' . (string) $imageIdentifier;
+        return 'metadata:'.$user.'|'.(string) $imageIdentifier;
     }
 }

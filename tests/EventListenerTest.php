@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+
 namespace Imbo\Plugin\MetadataCache;
 
 use DateTime;
@@ -268,7 +269,7 @@ class EventListenerTest extends TestCase
         $this->cache
             ->expects($this->once())
             ->method('delete')
-            ->with('metadata:' . $this->user . '|' . $this->imageIdentifier);
+            ->with('metadata:'.$this->user.'|'.$this->imageIdentifier);
 
         $this->listener->deleteFromCache($this->event);
     }
