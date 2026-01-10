@@ -15,16 +15,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php:
-          - "8.3"
-          - "8.4"
-          - "8.5"
-        memcached:
-          - "1.6"
         composer-script:
           - cs
           - sa
           - test
+        memcached:
+          - "1.6"
+        php:
+          - "8.3"
+          - "8.4"
+          - "8.5"
     name: composer run ${{ matrix.composer-script }} / PHP ${{ matrix.php }}
     services:
       memcached:

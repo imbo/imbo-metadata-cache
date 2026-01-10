@@ -1,15 +1,16 @@
 <?php declare(strict_types=1);
+
 namespace Imbo\Plugin\MetadataCache\Cache;
 
 /**
- * APCu cache
+ * APCu cache.
  */
 class APCu implements CacheInterface
 {
     private string $namespace;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param string $namespace A prefix that will be added to all keys
      */
@@ -34,13 +35,14 @@ class APCu implements CacheInterface
     }
 
     /**
-     * Generate a namespaced key
+     * Generate a namespaced key.
      *
      * @param string $key The key specified by the user
+     *
      * @return string A namespaced key
      */
     protected function getKey(string $key): string
     {
-        return $this->namespace . ':' . $key;
+        return $this->namespace.':'.$key;
     }
 }
