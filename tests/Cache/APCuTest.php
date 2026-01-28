@@ -3,21 +3,16 @@
 namespace Imbo\Plugin\MetadataCache\Cache;
 
 use PHPUnit\Framework\Attributes\CoversClass;
-
-use function extension_loaded;
-use function ini_get;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\RequiresSetting;
 
 #[CoversClass(APCu::class)]
+#[RequiresPhpExtension('apcu')]
+#[RequiresSetting('apc.enable_cli', '1')]
 class APCuTest extends CacheTests
 {
     protected function getAdapter(): APCu
     {
-        if (!extension_loaded('apcu')) {
-            $this->markTestSkipped('APC(u) is not installed');
-        } elseif (!ini_get('apc.enable_cli')) {
-            $this->markTestSkipped('apc.enable_cli must be set to On to run this test case');
-        }
-
         return new APCu(uniqid('imbo-metadata-cache-test-', true));
     }
 }
